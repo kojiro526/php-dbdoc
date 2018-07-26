@@ -1,0 +1,16 @@
+{
+    "name": "kojiro526/php-dbdoc",
+    "description": "Generate database documents.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kojiro",
+            "email": "kojiro@ryusei-sha.com"
+        }
+    ],
+    "require": {
+        "pear/console_commandline": "^1.2",
+        "doctrine/dbal": "^2.8"
+    }
+}

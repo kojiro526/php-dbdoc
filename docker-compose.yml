@@ -1,0 +1,19 @@
+version: "3.0"
+services:
+  php:
+    build: ./
+    links:
+      - db
+    volumes:
+      - ./:/work
+    working_dir: /work
+    container_name: php-dbdoc-php
+    tty: true
+  db:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: hogehoge123
+      MYSQL_DATABASE: sampledb
+    container_name: php-dbdoc-db
+    ports:
+      - 13306:3306
