@@ -5,6 +5,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use PhpDbdoc\lib\Config;
 
 class GenerateCommand
 {
@@ -33,6 +34,36 @@ class GenerateCommand
             'description' => 'Separate files one by one',
             'action' => 'StoreTrue'
         ]);
+        $parser->addOption('host', [
+            'short_name' => '-h',
+            'long_name' => '--host',
+            'description' => 'Indicate database host',
+            'action' => 'StoreString'
+        ]);
+        $parser->addOption('dbname', [
+            'short_name' => '-d',
+            'long_name' => '--dbname',
+            'description' => 'Indicate schema name',
+            'action' => 'StoreString'
+        ]);
+        $parser->addOption('user', [
+            'short_name' => '-u',
+            'long_name' => '--user',
+            'description' => 'Indicate database user name',
+            'action' => 'StoreString'
+        ]);
+        $parser->addOption('password', [
+            'short_name' => '-p',
+            'long_name' => '--password',
+            'description' => 'Indicate database password',
+            'action' => 'StoreString'
+        ]);
+        $parser->addOption('port', [
+            'short_name' => '-P',
+            'long_name' => '--port',
+            'description' => 'Indicate database port',
+            'action' => 'StoreString'
+        ]);
         $this->options = $parser->parse()->options;
     }
 
@@ -42,54 +73,32 @@ class GenerateCommand
         $output_file = $this->options['output'];
 
         // 接続情報
-        $cfg = array(
+        $option_config = array(
             'driver'   => 'pdo_mysql',
-            'host'     => 'db',
-            'dbname'   => 'sampledb',
-            'user'     => 'root',
-            'password' => 'hogehoge123',
+            'host'     => $this->options['host'],
+            'dbname'   => $this->options['dbname'],
+            'user'     => $this->options['user'],
+            'password' => $this->options['password'],
+            'port'     => $this->options['port']
         );
-
-        $conn = DriverManager::getConnection($cfg);
-        $tables = $conn->getSchemaManager()->listTables();
+        
+        $config = new Config($option_config);
+        $conn = DriverManager::getConnection($config->getConfig());
+        $src_tables = $conn->getSchemaManager()->listTables();
+        $tables = [];
 
         /* @var $table Table */
+        foreach ($src_tables as $i => $table)
+        {
+            array_push($tables, new \PhpDbdoc\lib\Table($table));
+        }
+        
         foreach ($tables as $table)
         {
-            echo $table->getName() . PHP_EOL;
-
-            $pkeys = [];
-
-            if ($table->hasPrimaryKey())
-            {
-                $pkeys = array_flip($table->getPrimaryKeyColumns());
-            }
-
-            /* @var $column Column */
-            foreach ($table->getColumns() as $column)
-            {
-                $name = $column->getName();
-
-                if (isset($pkeys[$name]))
-                {
-                    echo " * " . $name . PHP_EOL;
-                }
-                else
-                {
-                    echo "   " . $name . PHP_EOL;
-                }
-            }
-
-            /* @var $fkey ForeignKeyConstraint */
-            foreach ($table->getForeignKeys() as $fkey)
-            {
-                $cols = implode(", ", $fkey->getColumns());
-                $name = $fkey->getForeignTableName();
-                $refs = implode(', ', $fkey->getForeignColumns());
-                echo "     ... fkey ( $cols ) ref $name ( $refs )" . PHP_EOL;
-            }
-
-            echo PHP_EOL;
+            echo $table->getTableInfo() . "\n";
+            echo $table->getColumnsInfo() . "\n";
+            echo $table->getForignKeyInfo() . "\n";
         }
+        echo PHP_EOL;
     }
 }
