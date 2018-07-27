@@ -97,6 +97,7 @@ class GenerateCommand
         {
             echo $table->getTableInfo() . "\n";
             echo $table->getColumnsInfo() . "\n";
+            echo $table->getIndexInfo() . "\n";
             echo $table->getForignKeyInfo() . "\n";
         }
         echo PHP_EOL;

@@ -26,7 +26,7 @@ class Table
         }
 
         /* @var $column Column */
-        $header = "| No | 名前 | 型 | 主キー | Null | 初期値 |\n";
+        $header = "| No | 名前 | 型 | 主キー | 必須 | 初期値 |\n";
         $header .= "|:---|:---|:---|:---:|:---|\n";
         $rows = '';
         $i = 1;
@@ -61,11 +61,28 @@ class Table
             $name = $fkey->getForeignTableName();
             $refs = implode(', ', $fkey->getForeignColumns());
             $text_ref  = sprintf("%s ( %s )", $name, $refs);
-            $text_fkey = $cols;
+            $text_fkey = sprintf("%s ( %s )", $fkey->getName(), $cols);
             $rows .= sprintf("| %d | %s | %s | %s | %s |\n", $i, $text_fkey, $text_ref, $fkey->onUpdate(), $fkey->onDelete() );
             $i++;
         }
         
+        return $header . $rows;
+    }
+    
+    public function getIndexInfo()
+    {
+        $header = "| No | インデックス | 主キー | ユニーク |\n";
+        $header .= "|:---|:---|:---:|:---:|\n";
+        $rows = '';
+        $i = 1;
+        foreach ($this->src_table->getIndexes() as $index)
+        {
+            $text_index = sprintf("%s ( %s )", $index->getName(), implode(", ", $index->getColumns()));
+            $is_pkey = empty($index->isPrimary()) ? '' : '○';
+            $is_unique = empty($index->isUnique()) ? '' : '○';
+            $rows .= sprintf("| %d | %s | %s | %s |\n", $i, $text_index, $is_pkey, $is_unique);
+            $i++;
+        }
         return $header . $rows;
     }
 }
