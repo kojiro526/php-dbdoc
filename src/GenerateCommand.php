@@ -90,7 +90,7 @@ class GenerateCommand
         /* @var $table Table */
         foreach ($src_tables as $i => $table)
         {
-            array_push($tables, new \PhpDbdoc\lib\Table($table));
+            array_push($tables, new \PhpDbdoc\lib\Table($table, $conn->getDatabasePlatform()));
         }
         
         foreach ($tables as $table)

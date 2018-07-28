@@ -4,10 +4,12 @@ namespace PhpDbdoc\lib;
 class Table
 {
     private $src_table = null;
+    private $platform = null;
     
-    public function __construct($table)
+    public function __construct($table, $platform = null)
     {
         $this->src_table = $table;
+        if (!empty($platform)) $this->platform = $platform;
     }
     
     public function getTableInfo()
