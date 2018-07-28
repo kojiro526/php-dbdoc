@@ -1,5 +1,5 @@
 <?php
-namespace PhpDbdoc\lib;
+namespace PhpDbdoc\Libs;
 
 /**
  * 対象となるファイルを取得する

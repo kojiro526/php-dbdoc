@@ -3,9 +3,9 @@ namespace PhpDbdoc;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Table;
-use PhpDbdoc\lib\Config;
-use PhpDbdoc\lib\OutputPath;
-use PhpDbdoc\lib\Writer;
+use PhpDbdoc\Libs\Config;
+use PhpDbdoc\Libs\OutputPath;
+use PhpDbdoc\Libs\Writer;
 
 class GenerateCommand
 {
@@ -92,7 +92,7 @@ class GenerateCommand
         /* @var Doctrine\DBAL\Schema\Table $table */
         foreach ($src_tables as $i => $table)
         {
-            array_push($tables, new \PhpDbdoc\lib\Table($table, $conn->getDatabasePlatform()));
+            array_push($tables, new \PhpDbdoc\Libs\Table($table, $conn->getDatabasePlatform()));
         }
         
         $writer = new Writer($tables, $output_path, true);

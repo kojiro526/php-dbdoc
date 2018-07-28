@@ -4,7 +4,7 @@ namespace PhpDbdoc\Test;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
-use PhpDbdoc\lib\Table;
+use PhpDbdoc\Libs\Table;
 
 class TableTest extends TestCase
 {
