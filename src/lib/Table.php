@@ -66,6 +66,7 @@ class Table
             $i++;
         }
         
+        if ($rows == '') return '';
         return $header . $rows;
     }
     
@@ -83,6 +84,8 @@ class Table
             $rows .= sprintf("| %d | %s | %s | %s |\n", $i, $text_index, $is_pkey, $is_unique);
             $i++;
         }
+
+        if ($rows == '') return '';
         return $header . $rows;
     }
 }
