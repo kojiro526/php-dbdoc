@@ -26,14 +26,15 @@ class Table
         }
 
         /* @var $column Column */
-        $header = "| No | 名前 | 型 | 主キー | 必須 | 初期値 |\n";
-        $header .= "|:---|:---|:---|:---:|:---|\n";
+        $header = "| No | 名前 | 型 | 主キー | 必須 | 初期値 | AI | US |\n";
+        $header .= "|:---|:---|:---|:---:|:---|:---:|:---:|\n";
         $rows = '';
         $i = 1;
         foreach ($this->src_table->getColumns() as $column)
         {
             $name = $column->getName();
-            $type = $column->getType();
+            $type = $column->getType()->getName();
+            
             $length = $column->getLength();
             if (!empty($length)){
                 $type .= sprintf("(%d)", $length);
@@ -41,7 +42,9 @@ class Table
             $is_pkey = isset($pkeys[$name]) ? '○' : '';
             $is_notnull = !empty($column->getNotnull()) ? '○' : '';
             $default = $column->getDefault();
-            $rows .= sprintf("| %d | %s | %s | %s | %s | %s |\n", $i, $name, $type, $is_pkey, $is_notnull, $default);
+            $is_autoincrement = empty($column->getAutoincrement()) ? '' : '○';
+            $is_unsigned = empty($column->getUnsigned()) ? '' : '○';
+            $rows .= sprintf("| %d | %s | %s | %s | %s | %s | %s | %s |\n", $i, $name, $type, $is_pkey, $is_notnull, $default, $is_autoincrement, $is_unsigned);
             $i++;
         }
         
