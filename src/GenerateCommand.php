@@ -3,9 +3,9 @@ namespace PhpDbdoc;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use PhpDbdoc\lib\Config;
+use PhpDbdoc\lib\OutputPath;
+use PhpDbdoc\lib\Writer;
 
 class GenerateCommand
 {
@@ -69,8 +69,10 @@ class GenerateCommand
 
     public function execute()
     {
-
-        $output_file = $this->options['output'];
+        $output_path = new OutputPath($this->options['output']);
+        if ($output_path->isMissingPath()) {
+            die(sprintf("File or directory not found. %s", $output_path->getRawPath()));
+        }
 
         // 接続情報
         $option_config = array(
@@ -87,19 +89,13 @@ class GenerateCommand
         $src_tables = $conn->getSchemaManager()->listTables();
         $tables = [];
 
-        /* @var $table Table */
+        /* @var Doctrine\DBAL\Schema\Table $table */
         foreach ($src_tables as $i => $table)
         {
             array_push($tables, new \PhpDbdoc\lib\Table($table, $conn->getDatabasePlatform()));
         }
         
-        foreach ($tables as $table)
-        {
-            echo $table->getTableInfo() . "\n";
-            echo $table->getColumnsInfo() . "\n";
-            echo $table->getIndexInfo() . "\n";
-            echo $table->getForignKeyInfo() . "\n";
-        }
-        echo PHP_EOL;
+        $writer = new Writer($tables, $output_path, true);
+        $writer->save();
     }
 }

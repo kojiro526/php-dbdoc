@@ -29,5 +29,8 @@
     },
     "bin" : [
         "bin/dbdoc-php"
-    ]
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^7.2"
+    }
 }

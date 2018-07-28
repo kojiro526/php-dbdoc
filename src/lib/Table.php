@@ -3,8 +3,8 @@ namespace PhpDbdoc\lib;
 
 class Table
 {
-    private $src_table = null;
-    private $platform = null;
+    private $src_table;
+    private $platform;
     
     public function __construct($table, $platform = null)
     {
@@ -12,9 +12,14 @@ class Table
         if (!empty($platform)) $this->platform = $platform;
     }
     
+    public function getTableName()
+    {
+        return $this->src_table->getName();
+    }
+
     public function getTableInfo()
     {
-        echo "- " . $this->src_table->getName()  . "\n";
+        return "- " . $this->src_table->getName()  . "\n";
     }
     
     public function getColumnsInfo()
@@ -92,5 +97,32 @@ class Table
 
         if ($rows == '') return '';
         return $header . $rows;
+    }
+    
+    /**
+     * パスの配列から自テーブルのファイルを検索する
+     * 
+     * @param array|string $paths
+     * @return string|boolean
+     */
+    public static function findMyFile($table_name, $paths)
+    {
+        if (is_array($paths)){
+            foreach($paths as $path)
+            {
+                $ret_path = Table::findMyFile($table_name, $path);
+                if ($ret_path != false) return $ret_path;
+            }
+            return false;
+        }
+        
+        $file_name = pathinfo($paths)['filename'];
+        $pattern = '/' . $table_name . '/';
+        if(preg_match($pattern, $file_name) == 1)
+        {
+            return $paths;
+        }
+        
+        return false;
     }
 }
