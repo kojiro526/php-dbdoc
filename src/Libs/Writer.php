@@ -46,7 +46,7 @@ class Writer
                 $content = new Content($content_source);
             }
             $content->addPiece($table->getTableName() . '-table-info', $table->getTableInfo());
-            $content->addPiece($table->getTableName() . '-column-info', $table->getColumnsInfo());
+            $content->addPiece($table->getTableName() . '-column-info', $table->getColumnsInfo() . "\n" . $table->getColumnOrderedListTemplate());
             $content->addPiece($table->getTableName() . '-index-info', $table->getIndexInfo());
             $content->addPiece($table->getTableName() . '-fkey-info', $table->getForignKeyInfo());
             

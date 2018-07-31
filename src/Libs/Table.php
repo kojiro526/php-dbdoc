@@ -58,6 +58,20 @@ class Table
         return $header . $rows;
     }
     
+    public function getColumnOrderedListTemplate()
+    {
+        $template = "<!-- dbdoc_column-ordered-list-template\n";
+        $i = 1;
+        foreach($this->src_table->getColumns() as $column)
+        {
+            $template .= sprintf("%d. %s\n", $i, $column->getName());
+            $i++;
+        }
+        $template .= "dbdoc_column-ordered-list-template -->\n";
+        
+        return $template;
+    }
+    
     public function getForignKeyInfo()
     {
         $header = "| No | 外部キー | 参照先 | 更新時 | 削除時 |\n";
