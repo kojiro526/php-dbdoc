@@ -20,7 +20,8 @@ class Content
     public function build()
     {
         $origin = $this->origin_content;
-        if (empty($origin)) return $this->buildNormalContent();
+        //if (empty($origin)) return $this->buildNormalContent();
+        //if (empty($origin)) $origin = $this->createDefaultTemplate($pattern);
 
         foreach($this->pieces as $piece)
         {
@@ -38,6 +39,7 @@ class Content
         return $origin;
     }
     
+    /*
     public function buildNormalContent()
     {
         $content = '';
@@ -49,6 +51,7 @@ class Content
         }
         return $content;
     }
+    */
     
     public static function getPatternTag($key, $place = 'all')
     {

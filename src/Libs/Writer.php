@@ -39,7 +39,12 @@ class Writer
             
             $output_file = new OutputFile($output_file_path);
             
-            $content = new Content($output_file->getOriginContent());
+            $content_source = $output_file->getOriginContent();
+            if(empty($content_source)) {
+                $content = (new Template($table->getTableName()))->build();
+            }else{
+                $content = new Content($content_source);
+            }
             $content->addPiece($table->getTableName() . '-table-info', $table->getTableInfo());
             $content->addPiece($table->getTableName() . '-column-info', $table->getColumnsInfo());
             $content->addPiece($table->getTableName() . '-index-info', $table->getIndexInfo());
