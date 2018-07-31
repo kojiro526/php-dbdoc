@@ -55,7 +55,7 @@ class Table
             $i++;
         }
         
-        return $header . $rows;
+        return $header . $rows . "\n__AI__ =AutoIncrement / __US__ =Unsigned\n";
     }
     
     public function getColumnOrderedListTemplate()
