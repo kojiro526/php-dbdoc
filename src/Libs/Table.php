@@ -34,7 +34,7 @@ class Table
 
         /* @var $column Column */
         $header = "| No | 名前 | 型 | 主キー | 必須 | 初期値 | AI | US |\n";
-        $header .= "|:---|:---|:---|:---:|:---|:---:|:---:|\n";
+        $header .= "|:---|:---|:---|:---:|:---:|:---|:---:|:---:|\n";
         $rows = '';
         $i = 1;
         foreach ($this->src_table->getColumns() as $column)
