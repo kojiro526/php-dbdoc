@@ -33,21 +33,21 @@ class Template
 
 ### カラム定義
 
-<!-- php-dbdoc_${pattern_name}-column-info Start -->
+<!-- dbdoc_${pattern_name}-column-info Start -->
 
-<!-- php-dbdoc_${pattern_name}-column-info End -->
+<!-- dbdoc_${pattern_name}-column-info End -->
 
 ### インデックス
 
-<!-- php-dbdoc_${pattern_name}-index-info Start -->
+<!-- dbdoc_${pattern_name}-index-info Start -->
 
-<!-- php-dbdoc_${pattern_name}-index-info End -->
+<!-- dbdoc_${pattern_name}-index-info End -->
 
 ### 外部キー
 
-<!-- php-dbdoc_${pattern_name}-fkey-info Start -->
+<!-- dbdoc_${pattern_name}-fkey-info Start -->
 
-<!-- php-dbdoc_${pattern_name}-fkey-info End -->
+<!-- dbdoc_${pattern_name}-fkey-info End -->
 
 EOF;
         return $template;
