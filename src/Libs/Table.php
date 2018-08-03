@@ -131,8 +131,11 @@ class Table
         }
         
         $file_name = pathinfo($paths)['filename'];
-        $pattern = '/' . $table_name . '/';
-        if(preg_match($pattern, $file_name) == 1)
+        $contents = file_get_contents($paths);
+        if($contents === false) return false;
+
+        $pattern = '/' . sprintf('<!-- dbdoc-%s-marker-label -->', $table_name) . '/';
+        if(preg_match($pattern, $contents) == 1)
         {
             return $paths;
         }
