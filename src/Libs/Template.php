@@ -33,22 +33,24 @@ class Template
 
 ### カラム定義
 
-<!-- dbdoc_${pattern_name}-column-info Start -->
+<!-- dbdoc-${pattern_name}-column-info Start -->
 
-<!-- dbdoc_${pattern_name}-column-info End -->
+<!-- dbdoc-${pattern_name}-column-info End -->
 
 ### インデックス
 
-<!-- dbdoc_${pattern_name}-index-info Start -->
+<!-- dbdoc-${pattern_name}-index-info Start -->
 
-<!-- dbdoc_${pattern_name}-index-info End -->
+<!-- dbdoc-${pattern_name}-index-info End -->
 
 ### 外部キー
 
-<!-- dbdoc_${pattern_name}-fkey-info Start -->
+<!-- dbdoc-${pattern_name}-fkey-info Start -->
 
-<!-- dbdoc_${pattern_name}-fkey-info End -->
+<!-- dbdoc-${pattern_name}-fkey-info End -->
 
+<!-- Don't remove the following comments. -->
+<!-- dbdoc-${pattern_name}-marker-label -->
 EOF;
         return $template;
     }

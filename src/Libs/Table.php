@@ -60,14 +60,14 @@ class Table
     
     public function getColumnOrderedListTemplate()
     {
-        $template = "<!-- dbdoc_column-ordered-list-template\n";
+        $template = "<!-- dbdoc-column-ordered-list-template\n";
         $i = 1;
         foreach($this->src_table->getColumns() as $column)
         {
             $template .= sprintf("%d. %s\n", $i, $column->getName());
             $i++;
         }
-        $template .= "dbdoc_column-ordered-list-template -->\n";
+        $template .= "dbdoc-column-ordered-list-template -->\n";
         
         return $template;
     }

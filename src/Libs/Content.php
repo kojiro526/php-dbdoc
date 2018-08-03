@@ -39,8 +39,8 @@ class Content
     
     public static function getPatternTag($key, $place = 'all')
     {
-        $pattern_start = sprintf('<!-- dbdoc_%s Start -->', $key);
-        $pattern_end = sprintf('<!-- dbdoc_%s End -->', $key);
+        $pattern_start = sprintf('<!-- dbdoc-%s Start -->', $key);
+        $pattern_end = sprintf('<!-- dbdoc-%s End -->', $key);
         $pattern = sprintf('/%s.*?%s/s', $pattern_start, $pattern_end);
         
         if($place == 'all') return $pattern;

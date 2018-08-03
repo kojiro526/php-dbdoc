@@ -12,15 +12,17 @@ class ContentTest extends TestCase
     public function dataProvider()
     {
 $origin_1 =<<< EOF1
-<!-- php-dbdoc_my_table Start -->
+<!-- dbdoc-my_table Start -->
 aaaaa
-<!-- php-dbdoc_my_table End -->
+<!-- dbdoc-my_table End -->
 EOF1;
 
 $expects_1 =<<< EOF1
-<!-- php-dbdoc_my_table Start -->
+<!-- dbdoc-my_table Start -->
+
 bbbbb
-<!-- php-dbdoc_my_table End -->
+
+<!-- dbdoc-my_table End -->
 EOF1;
         return [
             [
@@ -55,9 +57,9 @@ EOF1;
     
     public function testPatternTag()
     {
-        $this->assertEquals('<!-- php-dbdoc_my_table_name Start -->', Content::getPatternTag('my_table_name', 'start'));
-        $this->assertEquals('<!-- php-dbdoc_my_table_name End -->', Content::getPatternTag('my_table_name', 'end'));
-        $this->assertEquals('/<!-- php-dbdoc_my_table_name Start -->.*?<!-- php-dbdoc_my_table_name End -->/s', Content::getPatternTag('my_table_name'));
+        $this->assertEquals('<!-- dbdoc-my_table_name Start -->', Content::getPatternTag('my_table_name', 'start'));
+        $this->assertEquals('<!-- dbdoc-my_table_name End -->', Content::getPatternTag('my_table_name', 'end'));
+        $this->assertEquals('/<!-- dbdoc-my_table_name Start -->.*?<!-- dbdoc-my_table_name End -->/s', Content::getPatternTag('my_table_name'));
     }
 }
     
