@@ -40,12 +40,9 @@ class Table
         foreach ($this->src_table->getColumns() as $column)
         {
             $name = $column->getName();
-            $type = $column->getType()->getName();
+            $type = $column->getType()->getSQLDeclaration($column->toArray(), $this->platform);
+            if (!empty($type)) $type = preg_split('/\s/', $type)[0];
             
-            $length = $column->getLength();
-            if (!empty($length)){
-                $type .= sprintf("(%d)", $length);
-            }
             $is_pkey = isset($pkeys[$name]) ? '○' : '';
             $is_notnull = !empty($column->getNotnull()) ? '○' : '';
             $default = $column->getDefault();
