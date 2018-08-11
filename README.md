@@ -6,15 +6,54 @@ DB定義書を既存のスキーマから生成するツールです。
 
 - 既存のデータベース上のスキーマからDB定義書をMarkdown形式で出力します。
 - カラム、インデックス、外部キー等の情報を出力します。
+- ファイル内でツールが更新するべき場所としない場所が分離されており、ツールが更新しない場所には任意の記述を加えることができます。
+- ファイル内にコメント形式で記述されたタグを元にテーブルとファイルの紐付けを行っているため、ファイル名は自由に変更することができます。
+
+## 必要要件
+
+    - php >= 7.1.0
+
+## 事前の設定
+
+このコマンドはcomposerでグローバルインストールして使うことを想定しているため、以下のディレクトリにパスを通して下さい。
+
+### Linux, OSX等
+
+`.bash_profile`等に以下のパスを設定して下さい。
+
+```
+export PATH=$HOME/.composer/vendor/bin:$PATH
+```
+
+### Windows
+
+Windowsでは以下のフォルダを環境変数のPATHに設定して下さい。
+
+```
+%USERPROFILE%\AppData\Roaming\Composer\vendor\bin
+```
+
+## インストール
+
+```
+$ composer global require kojiro526/php-dbdoc
+```
+
+本リポジトリに含まれるDockerfileを元にDockerイメージをビルドすると、環境構築の手間を省く事が出来ます。
+
+```
+$ docker build -t kojiro526/php-dbdoc .
+$ docker run -it --rm -v $(pwd):/work kojiro526/php-dbdoc dbdoc-php --help
+```
 
 ## 使い方
 
 ```
-$ docker-compose exec php php -q ./bin/dbdoc-php --help
+$ dbdoc-php --help
 Database docments generator
 
 Usage:
-  ./bin/dbdoc-php [options]
+  dbdoc-php [options]
 
 Options:
   -c config, --config=config        Indicate config file
@@ -30,49 +69,119 @@ Options:
 
 以下のようにしてDBに接続し、指定したディレクトリ配下にDB定義書を出力します。
 
+※localhostにMySQL（MariaDB）のデータベースが立ち上がっている想定です。
+
 ```
-$ dbdoc-php --host=db --dbname=sampledb --user=root --password=hogehoge123 --port=3306 -o ./output_dir
+$ dbdoc-php --host=localhost --dbname=sampledb --user=root --password=hogehoge123 --port=3306 -o ./output_dir
 $ ls ./output_dir
 departments.md   devisions.md        profiles.md     users.md
 $ cat ./output_dir/users.md
-<!-- php-dbdoc_users-table-info Start -->
+## users
 
-- users
+### カラム定義
 
-<!-- php-dbdoc_users-table-info End -->
-
-<!-- php-dbdoc_users-column-info Start -->
+<!-- dbdoc-users-column-info Start -->
 
 | No | 名前 | 型 | 主キー | 必須 | 初期値 | AI | US |
-|:---|:---|:---|:---:|:---|:---:|:---:|
-| 1 | id | integer | ○ | ○ |  | ○ | ○ |
-| 2 | email | string(255) |  | ○ |  |  |  |
-| 3 | password | string(255) |  | ○ |  |  |  |
-| 4 | remember_token | string(100) |  |  |  |  |  |
-| 5 | deleted | datetime |  |  |  |  |  |
-| 6 | created | datetime |  |  |  |  |  |
-| 7 | modified | datetime |  |  |  |  |  |
+|:---|:---|:---|:---:|:---:|:---|:---:|:---:|
+| 1 | id | INT | ○ | ○ |  | ○ | ○ |
+| 2 | email | VARCHAR(255) |  | ○ |  |  |  |
+| 3 | password | VARCHAR(255) |  | ○ |  |  |  |
+| 4 | remember_token | VARCHAR(100) |  |  |  |  |  |
+| 5 | deleted | DATETIME |  |  |  |  |  |
+| 6 | created | DATETIME |  |  |  |  |  |
+| 7 | modified | DATETIME |  |  |  |  |  |
 
-<!-- php-dbdoc_users-column-info End -->
+__AI__ =AutoIncrement / __US__ =Unsigned
 
-<!-- php-dbdoc_users-index-info Start -->
+<!-- dbdoc-column-ordered-list-template
+1. id
+2. email
+3. password
+4. remember_token
+5. deleted
+6. created
+7. modified
+dbdoc-column-ordered-list-template -->
+
+
+<!-- dbdoc-users-column-info End -->
+
+### インデックス
+
+<!-- dbdoc-users-index-info Start -->
 
 | No | インデックス | 主キー | ユニーク |
 |:---|:---|:---:|:---:|
 | 1 | PRIMARY ( id ) | ○ | ○ |
 | 2 | email_UNIQUE ( email ) |  | ○ |
 
-<!-- php-dbdoc_users-index-info End -->
 
-<!-- php-dbdoc_users-fkey-info Start -->
+<!-- dbdoc-users-index-info End -->
+
+### 外部キー
+
+<!-- dbdoc-users-fkey-info Start -->
 
 
 
-<!-- php-dbdoc_users-fkey-info End -->
+<!-- dbdoc-users-fkey-info End -->
+
+<!-- Don't remove the following comments. -->
+<!-- dbdoc-users-marker-label -->
 ```
 
 ファイル中のコメントタグは、本ツールが更新するブロックを認識するための目印です。
 
 本ツールを再度実行してDB定義書を更新すると、上記のブロック部分のみが更新されるため、それ以外の場所をどのように編集しても影響はありません。
 
-逆に言うと、上記のコメントで挟まれたブロックは本ツールによって上書きされる可能性があるため、手動で編集するべきではありません。
+## Dockerを使った実行方法
+
+本ツールはPHP7.1以上を要件としており、環境によっては利用が難しい場合もあり得るため、その場合はDockerを使って実行することもできます。
+
+本リポジトリに含まれるDockerfileをビルドしてDockerイメージを作成して下さい。
+
+```
+$ docker build -t kojiro526/php-dbdoc .
+```
+
+Dockerイメージは以下のようになっています。
+
+- 本ツールが最初からインストール済みです。
+- コンテナ内の`/work`をWORKDIRとして設定しているため、カレントディレクトリを`/work`にマウントするなどして使って下さい。
+
+```
+$ docker run -it --rm -v $(pwd):/work kojiro526/php-dbdoc dbdoc-php --host=docker.for.mac.localhost --dbname=sampledb --user=root --password=hogehoge123 --port=3306 -o ./output_dir
+```
+
+※コンテナ内からローカルPC上の`localhost`にアクセスするためには、docker.for.mac.localhost`（Windowsの場合は`docker.for.win.localhost`）と指定する必要があります。（そうしなければ、コンテナ内の`localhost`を参照してしまいます）
+
+
+## サンプル
+
+本リポジトリに含まれるdocker-compose.ymlはコマンドの実行環境とサンプルDBを含んでおり、気軽に動作を試すことが出来ます。
+
+サンプルの環境は以下のように実行して下さい。
+
+```
+$ docker-compose up -d
+```
+
+### サンプルDB
+
+上記のコマンド実行後、以下の場所にあるSQLが自動的に実行されてサンプルDBが作成されます。
+
+```
+./example/db/init/schema.sql
+```
+
+### サンプルDBのドキュメント生成
+
+以下のようにサンプルDBのドキュメントを`./tmp`配下に出力できます。
+
+```
+$ docker-compose exec php dbdoc-php --host=db --dbname=sampledb --user=root --password=hogehoge123 --port=3306 -o ./tmp/
+$ ls ./tmp/
+devisions.md        profiles.md     users.md    departments.md
+```
+
