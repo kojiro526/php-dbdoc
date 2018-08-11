@@ -11,7 +11,8 @@ DB定義書を既存のスキーマから生成するツールです。
 
 ## 必要要件
 
-    - php >= 7.1.0
+- php >= 7.1.0
+- composerが予め利用可能である必要があります。 （ [インストール方法](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx) ）
 
 ## 事前の設定
 
@@ -154,7 +155,7 @@ Dockerイメージは以下のようになっています。
 $ docker run -it --rm -v $(pwd):/work kojiro526/php-dbdoc dbdoc-php --host=docker.for.mac.localhost --dbname=sampledb --user=root --password=hogehoge123 --port=3306 -o ./output_dir
 ```
 
-※コンテナ内からローカルPC上の`localhost`にアクセスするためには、docker.for.mac.localhost`（Windowsの場合は`docker.for.win.localhost`）と指定する必要があります。（そうしなければ、コンテナ内の`localhost`を参照してしまいます）
+※コンテナ内からローカルPC上の`localhost`にアクセスするためには`、docker.for.mac.localhost`（Windowsの場合は`docker.for.win.localhost`）と指定する必要があります。（そうしなければ、コンテナ内の`localhost`を参照してしまいます）
 
 
 ## サンプル
